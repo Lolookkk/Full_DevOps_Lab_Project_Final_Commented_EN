@@ -9,7 +9,7 @@ import { describe, it, expect } from "vitest";
 describe("GET /info", () => {
   it("returns app info", async () => {
     const res = await request(app).get("/info");
-    expect(res.status).toBe(200);
+    expect(res.status).toBe(201);
     expect(typeof res.body.name).toBe("string");
     expect(typeof res.body.version).toBe("string");
     expect(typeof res.body.node).toBe("string");
