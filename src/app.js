@@ -9,12 +9,11 @@ import express from 'express'
 import fs from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { createRequire } from 'node:module'
+import { pathToFileURL } from 'node:url'
 import { errorHandler } from './utils/errorHandler.js'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
-const require = createRequire(import.meta.url)
 
 const app = express()
 
@@ -24,15 +23,23 @@ app.get('/health', (_req, res) => res.status(200).send('OK'))
 
 // Auto-mount all routers placed under src/routes/auto
 const autoDir = path.join(__dirname, 'routes', 'auto')
-if (fs.existsSync(autoDir)) {
+const mountAutoRoutes = async () => {
+  if (!fs.existsSync(autoDir)) return
+
   const files = fs.readdirSync(autoDir).filter(f => f.endsWith('.route.js'))
   for (const f of files) {
-    const full = path.join(autoDir, f)
-    const mod = require(full)
-    const router = mod.default || mod
+    const fullPath = path.join(autoDir, f)
+    const url = pathToFileURL(fullPath)
+    const mod = await import(url.href)
+
+    // Support: export default router OR export const router = ...
+    const router = mod.default ?? mod.router
     if (router) app.use('/', router)
   }
 }
+
+//ESM dynamic import we await before serving requests
+await mountAutoRoutes()
 
 // Global error middleware last
 app.use(errorHandler)
