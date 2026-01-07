@@ -53,8 +53,9 @@ jobs:
           cache: npm
 
       - name: Install dependencies
+        working-directory: frontend
         run: npm install
 
       - name: Build
         working-directory: frontend
-        run: node ../node_modules/vite/bin/vite.js build
+        run: node ./node_modules/vite/bin/vite.js build
