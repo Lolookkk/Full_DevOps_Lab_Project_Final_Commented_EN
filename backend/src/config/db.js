@@ -1,0 +1,25 @@
+import mongoose from 'mongoose'
+
+export async function connectDb (mongoUri) {
+  if (!mongoUri) {
+    throw new Error('MONGODB_URI is missing')
+  }
+
+  mongoose.set('strictQuery', true)
+
+  await mongoose.connect(mongoUri, {
+    serverSelectionTimeoutMS: 8000
+  })
+
+  return mongoose.connection
+}
+
+export async function disconnectDb () {
+  if (mongoose.connection?.readyState !== 0) {
+    await mongoose.disconnect()
+  }
+}
+
+export function dbState () {
+  return mongoose.connection.readyState
+}
