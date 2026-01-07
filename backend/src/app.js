@@ -11,11 +11,15 @@ import path from 'node:path'
 import { fileURLToPath, pathToFileURL } from 'node:url'
 import { errorHandler } from './utils/errorHandler.js'
 import { dbState } from './config/db.js'
+import { mockAuth } from './middlewares/mockAuth.js'
+import contactsRoutes from './routes/contacts.routes.js'
+import eventsRoutes from './routes/events.routes.js'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
 const app = express()
+app.use(express.json())
 
 // Simple root + health endpoints
 app.get('/', (_req, res) => res.json({ ok: true, message: 'Hello from CI/CD demo 👋' }))
@@ -27,6 +31,9 @@ app.get('/health/db', (_req, res) => {
   const ok = state === 1
   return res.status(ok ? 200 : 503).json({ ok, db: status })
 })
+app.use('/api', mockAuth)
+app.use(contactsRoutes)
+app.use(eventsRoutes)
 
 // Auto-mount all routers placed under src/routes/auto
 const autoDir = path.join(__dirname, 'routes', 'auto')
