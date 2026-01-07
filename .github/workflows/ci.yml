@@ -18,19 +18,17 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache-dependency-path: backend/package-lock.json
+          cache: npm
+          cache-dependency-path: package-lock.json
 
       - name: Install dependencies
-        working-directory: backend
         run: npm ci
 
       - name: Lint
-        working-directory: backend
-        run: npm run lint
+        run: npm run lint -w backend
 
       - name: Test (with coverage)
-        working-directory: backend
-        run: npm test -- --coverage
+        run: npm test -w backend -- --coverage
 
       - name: Upload coverage artifact
         uses: actions/upload-artifact@v4
@@ -53,9 +51,7 @@ jobs:
           cache: npm
 
       - name: Install dependencies
-        working-directory: frontend
-        run: npm install --workspaces=false
+        run: npm ci
 
       - name: Build
-        working-directory: frontend
-        run: node ./node_modules/vite/bin/vite.js build
+        run: npm run build -w frontend

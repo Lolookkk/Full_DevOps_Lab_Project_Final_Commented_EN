@@ -3,10 +3,10 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview",
-    "test": "vite build",
+    "dev": "node ../node_modules/vite/bin/vite.js",
+    "build": "node ../node_modules/vite/bin/vite.js build",
+    "preview": "node ../node_modules/vite/bin/vite.js preview",
+    "test": "node ../node_modules/vite/bin/vite.js build",
     "lint": "echo \"no frontend lint configured\""
   },
   "dependencies": {
