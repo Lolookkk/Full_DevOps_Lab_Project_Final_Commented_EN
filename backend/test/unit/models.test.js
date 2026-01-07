@@ -5,7 +5,10 @@ import { Contact } from '../../src/models/contact.model.js'
 import { Event } from '../../src/models/event.model.js'
 
 describe('Mongoose models', () => {
-  beforeAll(startTestDb)
+  beforeAll(async () => {
+    await startTestDb()
+    await Contact.init()
+  })
   afterAll(stopTestDb)
   beforeEach(clearTestDb)
 
