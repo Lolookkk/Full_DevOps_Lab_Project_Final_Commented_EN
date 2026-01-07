@@ -24,6 +24,20 @@ describe('Mongoose models', () => {
     ).rejects.toThrow()
   })
 
+  it('enforces unique email for users', async () => {
+    await User.create({
+      email: 'unique@test.com',
+      passwordHash: 'hash1'
+    })
+
+    await expect(
+      User.create({
+        email: 'unique@test.com',
+        passwordHash: 'hash2'
+      })
+    ).rejects.toThrow()
+  })
+
   it('creates an event linked to a contact', async () => {
     const u = await User.create({ email: 'c@c.com', passwordHash: 'x' })
     const c = await Contact.create({ userId: u._id, name: 'C', phoneE164: '+33611111111' })
