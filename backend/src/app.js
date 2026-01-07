@@ -8,8 +8,7 @@
 import express from 'express'
 import fs from 'node:fs'
 import path from 'node:path'
-import { fileURLToPath } from 'node:url'
-import { pathToFileURL } from 'node:url'
+import { fileURLToPath, pathToFileURL } from 'node:url'
 import { errorHandler } from './utils/errorHandler.js'
 import { dbState } from './config/db.js'
 
@@ -46,7 +45,7 @@ const mountAutoRoutes = async () => {
   }
 }
 
-//ESM dynamic import we await before serving requests
+// ESM dynamic import we await before serving requests
 await mountAutoRoutes()
 
 // Global error middleware last
