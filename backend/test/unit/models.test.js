@@ -8,6 +8,7 @@ describe('Mongoose models', () => {
   beforeAll(async () => {
     await startTestDb()
     await Contact.init()
+    await User.init()
   })
   afterAll(stopTestDb)
   beforeEach(clearTestDb)

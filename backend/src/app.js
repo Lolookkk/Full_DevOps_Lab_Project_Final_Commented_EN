@@ -11,7 +11,8 @@ import path from 'node:path'
 import { fileURLToPath, pathToFileURL } from 'node:url'
 import { errorHandler } from './utils/errorHandler.js'
 import { dbState } from './config/db.js'
-import { mockAuth } from './middlewares/mockAuth.js'
+import { auth } from './middlewares/auth.js'
+import authRoutes from './routes/auth.routes.js'
 import contactsRoutes from './routes/contacts.routes.js'
 import eventsRoutes from './routes/events.routes.js'
 
@@ -31,7 +32,8 @@ app.get('/health/db', (_req, res) => {
   const ok = state === 1
   return res.status(ok ? 200 : 503).json({ ok, db: status })
 })
-app.use('/api', mockAuth)
+app.use(authRoutes)
+app.use('/api', auth)
 app.use(contactsRoutes)
 app.use(eventsRoutes)
 
