@@ -1,99 +1,137 @@
+// frontend/src/pages/Messages.jsx
 import { useState, useEffect } from 'react';
 
 function Messages() {
-  const [campaigns, setCampaigns] = useState([]);
-  const [name, setName] = useState('');
-  const [message, setMessage] = useState('');
-  const [contact, setContact] = useState('');
+  const [messages, setMessages] = useState([]);
+  const [filter, setFilter] = useState('all');
+  const [loading, setLoading] = useState(true);
 
-  // Données MOCK au lieu de fetch API
   useEffect(() => {
-    // Simule un délai de chargement
-    setTimeout(() => {
-      setCampaigns([
-        { 
-          _id: '1', 
-          name: 'Anniversaires', 
-          message: 'Joyeux anniversaire {nom} ! Profite bien de ton anniversaire !', 
-          contact: 'Jean Dupont',
-        },
-        { 
-          _id: '2', 
-          name: 'Rappels Rendez-vous', 
-          message: 'Rappel: ton rdv demain à 14h', 
-          contact: 'Marie Martin',
-        }
-      ]);
-    }, 500);
+    loadMessages();
   }, []);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    
-    // Simule l'API en ajoutant localement
-    const newCampaign = {
-      _id: Date.now().toString(),
-      name,
-      message,
-      contact,
-      status: 'draft'
-    };
-    
-    setCampaigns([...campaigns, newCampaign]);
-    setName('');
-    setMessage('');
-    setContact('');
-    
-    // Optionnel: simuler un appel API
-    console.log('POST /api/campaigns:', { name, message, contact });
+  const loadMessages = async () => {
+    try {
+      const response = await fetch('/api/messages');
+      if (response.ok) {
+        const data = await response.json();
+        setMessages(data);
+      } else {
+        // Données mock si API non disponible
+        setMessages([
+          {
+            _id: '1',
+            content: 'Joyeux anniversaire Jean ! 🎂',
+            status: 'sent',
+            sendDate: '2024-03-15T10:00:00.000Z',
+            contactId: { name: 'Jean Dupont', phoneE164: '+33612345678' },
+            templateUsed: 'birthday'
+          },
+          {
+            _id: '2',
+            content: 'Rappel: rendez-vous demain',
+            status: 'scheduled',
+            sendDate: '2024-03-20T14:00:00.000Z',
+            contactId: { name: 'Marie Martin', phoneE164: '+33687654321' },
+            templateUsed: 'reminder'
+          }
+        ]);
+      }
+    } catch (error) {
+      console.error('Erreur:', error);
+    } finally {
+      setLoading(false);
+    }
   };
+
+  const deleteMessage = async (id) => {
+    if (window.confirm('Supprimer ce message ?')) {
+      try {
+        await fetch(`/api/messages/${id}`, { method: 'DELETE' });
+        loadMessages(); // Recharger
+      } catch (error) {
+        alert('Erreur lors de la suppression');
+      }
+    }
+  };
+
+  const filteredMessages = filter === 'all' 
+    ? messages 
+    : messages.filter(msg => msg.status === filter);
 
   return (
     <div>
-      <h1>Mes Campagnes</h1>
+      <h1>Historique des Messages</h1>
       
-      <form onSubmit={handleSubmit}>
-        <input 
-          type="text" 
-          placeholder="Nom de la campagne"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          required
-        />
-        <br />
-        <textarea 
-          placeholder="Message à envoyer"
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
-          required
-        />
-        <br />
-        <input 
-          type="text" 
-          placeholder="Contact (nom ou numéro)"
-          value={contact}
-          onChange={(e) => setContact(e.target.value)}
-          required
-        />
-        <br />
-        <button type="submit">Créer la campagne</button>
-      </form>
+      {/* Filtres */}
+      <div>
+        <button onClick={() => setFilter('all')}>
+          Tous ({messages.length})
+        </button>
+        <button onClick={() => setFilter('sent')}>
+          ✅ Envoyés ({messages.filter(m => m.status === 'sent').length})
+        </button>
+        <button onClick={() => setFilter('scheduled')}>
+          ⏰ Programmés ({messages.filter(m => m.status === 'scheduled').length})
+        </button>
+        <button onClick={() => setFilter('failed')}>
+          ❌ Échoués ({messages.filter(m => m.status === 'failed').length})
+        </button>
+      </div>
 
-      <h2>Campagnes créées</h2>
-      {campaigns.length === 0 ? (
-        <p>Aucune campagne créée</p>
+      {/* Liste */}
+      {loading ? (
+        <p>Chargement...</p>
+      ) : filteredMessages.length === 0 ? (
+        <p>Aucun message trouvé</p>
       ) : (
-        <ul>
-          {campaigns.map(campaign => (
-            <li key={campaign._id}>
-              <strong>{campaign.name}</strong> - Statut: {campaign.status}
-              <br />
-              Message: "{campaign.message}"
-              <br />
-              Pour: {campaign.contact}
-            </li>
-          ))}
-        </ul>
+        <table border="1">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Destinataire</th>
+              <th>Message</th>
+              <th>Template</th>
+              <th>Statut</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {filteredMessages.map(msg => (
+              <tr key={msg._id}>
+                <td>{new Date(msg.sendDate).toLocaleString()}</td>
+                <td>
+                  {msg.contactId?.name || 'Inconnu'}
+                  <br />
+                  <small>{msg.contactId?.phoneE164}</small>
+                </td>
+                <td>{msg.content}</td>
+                <td>{msg.templateUsed || '-'}</td>
+                <td>
+                  {msg.status === 'sent' ? '✅' : 
+                   msg.status === 'scheduled' ? '⏰' : 
+                   msg.status === 'failed' ? '❌' : '📝'}
+                </td>
+                <td>
+                  <button onClick={() => deleteMessage(msg._id)}>
+                    Supprimer
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
+
+      {/* Statistiques */}
+      {messages.length > 0 && (
+        <div>
+          <h3>Statistiques</h3>
+          <p>Total: {messages.length}</p>
+          <p>Envoyés: {messages.filter(m => m.status === 'sent').length}</p>
+          <p>Programmés: {messages.filter(m => m.status === 'scheduled').length}</p>
+          <p>Échoués: {messages.filter(m => m.status === 'failed').length}</p>
+        </div>
       )}
     </div>
   );
