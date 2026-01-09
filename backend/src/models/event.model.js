@@ -35,7 +35,7 @@ const eventSchema = new Schema(
       default: 'Europe/Paris'
     },
     lastSentYear: {
-    type: Number
+      type: Number
     }
   },
   { timestamps: true }

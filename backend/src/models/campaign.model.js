@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose from 'mongoose'
 
 const campaignSchema = new mongoose.Schema({
   name: {
@@ -38,8 +38,8 @@ const campaignSchema = new mongoose.Schema({
   }
 }, {
   timestamps: true
-});
+})
 
-const Campaign = mongoose.model('Campaign', campaignSchema);
+const Campaign = mongoose.model('Campaign', campaignSchema)
 
-export default Campaign;
+export default Campaign

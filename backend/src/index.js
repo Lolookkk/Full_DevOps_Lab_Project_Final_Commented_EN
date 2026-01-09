@@ -23,7 +23,6 @@ async function bootstrap () {
 
     startScheduler()
     console.log('[scheduler] started')
-
   } catch (err) {
     console.error('[db] connection failed:', err.message)
   }
