@@ -7,7 +7,7 @@ export const createCampaign = async (req, res, next) => {
     const newCampaign = await Campaign.create({
       name,
       description,
-      creator: req.user.id,
+      creator: req.userId,
       contacts,
       messageTemplate,
       scheduledDate,
@@ -22,7 +22,7 @@ export const createCampaign = async (req, res, next) => {
 
 export const getCampaigns = async (req, res, next) => {
   try {
-    const campaigns = await Campaign.find({ creator: req.user.id });
+    const campaigns = await Campaign.find({ creator: req.userId });
     res.json(campaigns);
   } catch (error) {
     next(error);
@@ -35,7 +35,7 @@ export const updateCampaignStatus = async (req, res, next) => {
     const { status } = req.body;
     
     const updatedCampaign = await Campaign.findOneAndUpdate(
-      { _id: id, creator: req.user.id },
+      { _id: id, creator: req.userId },
       { status },
       { new: true }
     );

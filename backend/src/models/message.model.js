@@ -11,9 +11,15 @@ const messageSchema = new mongoose.Schema({
     ref: 'Contact',
     required: true
   },
+  event: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Event',
+    required: false
+  },
   campaign: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Campaign'
+    ref: 'Campaign',
+    required: false
   },
   content: {
     type: String,

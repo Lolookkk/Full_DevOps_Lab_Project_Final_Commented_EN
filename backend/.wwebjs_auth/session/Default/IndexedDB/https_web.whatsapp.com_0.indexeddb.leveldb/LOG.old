@@ -1,15 +1,13 @@
-2026/01/09-03:21:57.098 5ea8 Reusing MANIFEST F:\Travail\SoftWare\Full_DevOps_Lab_Project_Final_Commented_EN\backend\.wwebjs_auth\session\Default\IndexedDB\https_web.whatsapp.com_0.indexeddb.leveldb/MANIFEST-000001
-2026/01/09-03:21:57.098 5ea8 Recovering log #456
-2026/01/09-03:21:57.140 5ea8 Reusing old log F:\Travail\SoftWare\Full_DevOps_Lab_Project_Final_Commented_EN\backend\.wwebjs_auth\session\Default\IndexedDB\https_web.whatsapp.com_0.indexeddb.leveldb/000456.log 
-2026/01/09-03:21:57.617 5ea8 Level-0 table #462: started
-2026/01/09-03:21:57.673 5ea8 Level-0 table #462: 1034969 bytes OK
-2026/01/09-03:21:57.705 5ea8 Delete type=0 #456
-2026/01/09-03:21:57.706 5ea8 Manual compaction at level-0 from '\x00\x9f\x00\x00\x00' @ 72057594037927935 : 1 .. '\x00\xa0\x00\x00\x00' @ 0 : 0; will stop at (end)
-2026/01/09-03:21:57.707 5ea8 Compacting 1@1 + 2@2 files
-2026/01/09-03:21:57.818 5ea8 Generated table #463@1: 43451 keys, 2201058 bytes
-2026/01/09-03:21:57.895 5ea8 Generated table #464@1: 44879 keys, 1655195 bytes
-2026/01/09-03:21:57.895 5ea8 Compacted 1@1 + 2@2 files => 3856253 bytes
-2026/01/09-03:21:57.926 5ea8 compacted to: files[ 0 0 2 0 0 0 0 ]
-2026/01/09-03:21:57.927 5ea8 Delete type=2 #458
-2026/01/09-03:21:57.927 5ea8 Delete type=2 #459
-2026/01/09-03:21:57.927 5ea8 Delete type=2 #462
+2026/01/09-17:01:12.538 27f8 Reusing MANIFEST F:\Travail\SoftWare\Full_DevOps_Lab_Project_Final_Commented_EN\backend\.wwebjs_auth\session\Default\IndexedDB\https_web.whatsapp.com_0.indexeddb.leveldb/MANIFEST-000001
+2026/01/09-17:01:12.538 27f8 Recovering log #576
+2026/01/09-17:01:12.548 27f8 Reusing old log F:\Travail\SoftWare\Full_DevOps_Lab_Project_Final_Commented_EN\backend\.wwebjs_auth\session\Default\IndexedDB\https_web.whatsapp.com_0.indexeddb.leveldb/000576.log 
+2026/01/09-17:01:13.726 29d4 Level-0 table #583: started
+2026/01/09-17:01:13.760 29d4 Level-0 table #583: 392411 bytes OK
+2026/01/09-17:01:13.792 29d4 Delete type=0 #576
+2026/01/09-17:01:13.792 2554 Manual compaction at level-0 from '\x00\xae\x00\x00\x00' @ 72057594037927935 : 1 .. '\x00\xaf\x00\x00\x00' @ 0 : 0; will stop at (end)
+2026/01/09-17:01:13.793 2554 Compacting 1@1 + 3@2 files
+2026/01/09-17:01:13.882 2554 Generated table #584@1: 73269 keys, 2228179 bytes
+2026/01/09-17:01:13.960 2554 Generated table #585@1: 30858 keys, 2211463 bytes
+2026/01/09-17:01:14.059 2554 Generated table #586@1: 69859 keys, 2139080 bytes
+2026/01/09-17:01:14.059 2554 Compacted 1@1 + 3@2 files => 6578722 bytes
+2026/01/09-17:01:14.091 2554 compacted to: files[ 0 0 3 0 0 0 0 ]

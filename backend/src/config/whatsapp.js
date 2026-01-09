@@ -5,7 +5,7 @@ import qrcode from 'qrcode-terminal';
 const client = new Client({
     authStrategy: new LocalAuth(),
     puppeteer: {
-        headless: false,
+        headless: true,
         args: ['--no-sandbox'],
     }
 });
@@ -16,7 +16,7 @@ client.on('qr', (qr) => {
 });
 
 client.on('ready', () => {
-    console.log('WhatsApp est prêt et connecté !');
+    console.log('[whatsapp] connected');
 });
 
 client.on('auth_failure', msg => {
