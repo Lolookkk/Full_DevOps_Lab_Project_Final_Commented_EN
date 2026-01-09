@@ -1,0 +1,27 @@
+2026/01/09-03:23:28.381 7534 Reusing MANIFEST F:\Travail\SoftWare\Full_DevOps_Lab_Project_Final_Commented_EN\backend\.wwebjs_auth\session\Default\IndexedDB\https_web.whatsapp.com_0.indexeddb.leveldb/MANIFEST-000001
+2026/01/09-03:23:28.381 7534 Recovering log #461
+2026/01/09-03:23:28.425 7534 Reusing old log F:\Travail\SoftWare\Full_DevOps_Lab_Project_Final_Commented_EN\backend\.wwebjs_auth\session\Default\IndexedDB\https_web.whatsapp.com_0.indexeddb.leveldb/000461.log 
+2026/01/09-03:23:28.798 7014 Level-0 table #467: started
+2026/01/09-03:23:28.854 7014 Level-0 table #467: 1045548 bytes OK
+2026/01/09-03:23:28.898 7014 Delete type=0 #461
+2026/01/09-03:23:28.899 71b8 Compacting 1@1 + 2@2 files
+2026/01/09-03:23:28.998 71b8 Generated table #468@1: 45245 keys, 2202354 bytes
+2026/01/09-03:23:29.075 71b8 Generated table #469@1: 56420 keys, 1998174 bytes
+2026/01/09-03:23:29.076 71b8 Compacted 1@1 + 2@2 files => 4200528 bytes
+2026/01/09-03:23:29.108 71b8 compacted to: files[ 0 0 2 0 0 0 0 ]
+2026/01/09-03:23:29.108 71b8 Delete type=2 #467
+2026/01/09-03:23:29.109 7534 Manual compaction at level-0 from '\x00\xa0\x00\x00\x00' @ 72057594037927935 : 1 .. '\x00\xa1\x00\x00\x00' @ 0 : 0; will stop at (end)
+2026/01/09-03:23:39.443 1144 Level-0 table #471: started
+2026/01/09-03:23:39.510 1144 Level-0 table #471: 1116601 bytes OK
+2026/01/09-03:23:39.543 1144 Delete type=2 #463
+2026/01/09-03:23:39.543 1144 Delete type=2 #464
+2026/01/09-03:23:39.543 1144 Delete type=0 #466
+2026/01/09-03:23:40.026 71b8 Compacting 1@1 + 2@2 files
+2026/01/09-03:23:40.141 71b8 Generated table #472@1: 47152 keys, 2204095 bytes
+2026/01/09-03:23:40.229 71b8 Generated table #473@1: 61086 keys, 2227175 bytes
+2026/01/09-03:23:40.273 71b8 Generated table #474@1: 7538 keys, 141035 bytes
+2026/01/09-03:23:40.273 71b8 Compacted 1@1 + 2@2 files => 4572305 bytes
+2026/01/09-03:23:40.305 71b8 compacted to: files[ 0 0 3 0 0 0 0 ]
+2026/01/09-03:23:40.306 71b8 Delete type=2 #468
+2026/01/09-03:23:40.306 71b8 Delete type=2 #469
+2026/01/09-03:23:40.306 71b8 Delete type=2 #471

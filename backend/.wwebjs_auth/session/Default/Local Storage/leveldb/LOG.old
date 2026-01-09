@@ -1,0 +1,8 @@
+2026/01/09-03:21:56.659 1d1c Reusing MANIFEST F:\Travail\SoftWare\Full_DevOps_Lab_Project_Final_Commented_EN\backend\.wwebjs_auth\session\Default\Local Storage\leveldb/MANIFEST-000001
+2026/01/09-03:21:56.662 1d1c Recovering log #3
+2026/01/09-03:21:56.663 1d1c Level-0 table #3: started
+2026/01/09-03:21:56.922 1d1c Level-0 table #3: 22338 bytes OK
+2026/01/09-03:21:56.922 1d1c Recovering log #4
+2026/01/09-03:21:56.923 1d1c Reusing old log F:\Travail\SoftWare\Full_DevOps_Lab_Project_Final_Commented_EN\backend\.wwebjs_auth\session\Default\Local Storage\leveldb/000004.log 
+2026/01/09-03:21:57.175 1d1c Delete type=0 #3
+2026/01/09-03:21:57.175 1d1c Delete type=2 #5
