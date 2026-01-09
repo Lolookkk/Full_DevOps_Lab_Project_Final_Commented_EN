@@ -24,7 +24,7 @@ const eventSchema = new Schema(
     label: {
       type: String,
       trim: true,
-      maxlength: 120
+      maxlength: 300
     },
     date: {
       type: Date,
@@ -33,6 +33,9 @@ const eventSchema = new Schema(
     timezone: {
       type: String,
       default: 'Europe/Paris'
+    },
+    lastSentYear: {
+      type: Number
     }
   },
   { timestamps: true }

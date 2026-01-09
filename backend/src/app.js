@@ -15,6 +15,8 @@ import { auth } from './middlewares/auth.js'
 import authRoutes from './routes/auth.routes.js'
 import contactsRoutes from './routes/contacts.routes.js'
 import eventsRoutes from './routes/events.routes.js'
+import messageRoutes from './routes/message.routes.js'
+import campaignRoutes from './routes/campaign.routes.js'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
@@ -36,6 +38,8 @@ app.use(authRoutes)
 app.use('/api', auth)
 app.use(contactsRoutes)
 app.use(eventsRoutes)
+app.use(messageRoutes)
+app.use(campaignRoutes)
 
 // Auto-mount all routers placed under src/routes/auto
 const autoDir = path.join(__dirname, 'routes', 'auto')
