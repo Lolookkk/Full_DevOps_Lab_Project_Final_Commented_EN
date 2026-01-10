@@ -22,6 +22,8 @@ const generateMessagesFromEvents = async () => {
       }
     }).populate('contactId')
 
+    console.log(`🎂 [scheduler] Found ${eventsToday.length} events for today.`);
+
     for (const event of eventsToday) {
       // Check if we already created a message for this event TODAY
       const alreadyCreated = await Message.exists({
@@ -31,6 +33,10 @@ const generateMessagesFromEvents = async () => {
           $lt: new Date(currentYear, currentMonth - 1, currentDay + 1)
         }
       })
+
+      if (alreadyCreated) {
+          console.log(`⚠️ [scheduler] Message already exists for event ${event._id}, skipping.`);
+      }
 
       if (!alreadyCreated) {
         await Message.create({
@@ -52,60 +58,69 @@ const generateMessagesFromEvents = async () => {
 // 2. MESSAGE PROCESSOR
 const processPendingMessages = async () => {
   const now = new Date()
+  console.log('🔎 [scheduler] Looking for messages due before:', now.toISOString()); // <--- ADD THIS
 
   try {
-    // FIX: Look for BOTH 'scheduled' AND 'pending' statuses
     const pendingMessages = await Message.find({
       status: { $in: ['scheduled', 'pending'] }, 
       scheduledAt: { $lte: now }
     }).populate('recipient')
 
+    if (pendingMessages.length === 0) {
+      console.log('zzz [scheduler] No messages to send right now.');
+      return; 
+    }
+    
+    // 1. CHECK IF WHATSAPP IS CONNECTED
+    if (!whatsappClient.info) {
+      console.log('⏳ [scheduler] WhatsApp is NOT connected yet. Skipping send.');
+      return; 
+    }
+
+    console.log(`🚀 [scheduler] Found ${pendingMessages.length} messages to send!`);
+
     for (const msg of pendingMessages) {
-      if (!msg.recipient) continue; // Skip if contact was deleted
+      if (!msg.recipient) continue; 
 
       try {
+        // 2. LOG BEFORE SENDING (To see where it crashes)
+        console.log(`[scheduler] 📤 Attempting to send to ${msg.recipient.name}...`);
+
         const cleanPhone = msg.recipient.phoneE164.replace('+', '')
         const chatId = `${cleanPhone}@c.us`
         
         await whatsappClient.sendMessage(chatId, msg.content)
 
+        // 3. LOG SUCCESS
+        console.log(`[scheduler] ✅ SUCCESS: Message sent to ${msg.recipient.name}`)
+
         msg.status = 'sent'
         msg.sentAt = new Date()
         await msg.save()
 
-        console.log(`[scheduler] SUCCESS: Message sent to ${msg.recipient.name}`)
       } catch (err) {
-        console.error(`[scheduler] FAILED: ${err.message}`)
+        console.error(`[scheduler] ❌ FAILED: ${err.message}`)
         msg.status = 'failed'
         msg.errorLog = err.message
         await msg.save()
       }
     }
-
-    // (Campaign logic remains the same...)
-    const pendingCampaigns = await Campaign.find({
-      status: 'scheduled',
-      scheduledDate: { $lte: now }
-    }).populate('contacts')
-    
-    // ... [Keep your existing campaign logic here] ...
-
-  } catch (error) {
-    console.error('[scheduler Error]:', error)
+  } catch (err) {
+    console.error('[scheduler] Erreur envoi messages:', err)
   }
 }
 
 // 3. CRON JOBS
 export const startScheduler = () => {
-  console.log('✅ [scheduler] Scheduler service started...'); // <--- ADD THIS
+  console.log('[scheduler] Scheduler service started...'); // <--- ADD THIS
 
   cron.schedule('* * * * *', () => {
-    console.log('⏰ [scheduler] Cron trigger: Checking events...'); // <--- ADD THIS
+    console.log('[scheduler] Cron trigger: Checking events...'); // <--- ADD THIS
     generateMessagesFromEvents()
   })
 
   cron.schedule('* * * * *', () => {
-    console.log('⏰ [scheduler] Cron trigger: Processing pending messages...'); // <--- ADD THIS
+    console.log('[scheduler] Cron trigger: Processing pending messages...'); // <--- ADD THIS
     processPendingMessages()
   })
 }

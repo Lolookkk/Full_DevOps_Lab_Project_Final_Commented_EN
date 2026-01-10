@@ -59,7 +59,7 @@ export default function Events() {
                   onChange={e => setFormData({...formData, type: e.target.value})}
                 >
                   <option value="birthday">🎂 Birthday</option>
-                  <option value="marriage">💍 Anniversary</option>
+                  <option value="marriage">💍 Marriage</option>
                   <option value="custom">📝 Custom</option>
                 </select>
               </div>
