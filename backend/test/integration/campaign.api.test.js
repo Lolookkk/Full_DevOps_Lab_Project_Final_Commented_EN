@@ -15,7 +15,7 @@ describe('Campaigns API', () => {
     await Contact.init()
     await User.init()
     await Campaign.init()
-    
+
     app = (await import('../../src/app.js')).default
 
     const res = await request(app)

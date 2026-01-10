@@ -1,3 +1,5 @@
-2026/01/10-18:02:42.826 47a0 Reusing MANIFEST F:\Travail\SoftWare\Full_DevOps_Lab_Project_Final_Commented_EN\backend\.wwebjs_auth\session\Default\Site Characteristics Database/MANIFEST-000001
-2026/01/10-18:02:42.837 47a0 Recovering log #3
-2026/01/10-18:02:42.838 47a0 Reusing old log F:\Travail\SoftWare\Full_DevOps_Lab_Project_Final_Commented_EN\backend\.wwebjs_auth\session\Default\Site Characteristics Database/000003.log 
+2026/01/10-19:26:14.697 7680 Log #3: 2 ops saved to Table #4 OK
+2026/01/10-19:26:14.704 7680 Archiving C:\Users\mathi\OneDrive\Bureau\annee 4 info\software truc\Full_DevOps_Lab_Project_Final_Commented_EN\backend\.wwebjs_auth\session\Default\Site Characteristics Database/000003.log: OK
+2026/01/10-19:26:14.705 7680 Table #4: 2 entries OK
+2026/01/10-19:26:14.712 7680 Archiving C:\Users\mathi\OneDrive\Bureau\annee 4 info\software truc\Full_DevOps_Lab_Project_Final_Commented_EN\backend\.wwebjs_auth\session\Default\Site Characteristics Database/MANIFEST-000001: OK
+2026/01/10-19:26:14.771 7680 **** Repaired leveldb C:\Users\mathi\OneDrive\Bureau\annee 4 info\software truc\Full_DevOps_Lab_Project_Final_Commented_EN\backend\.wwebjs_auth\session\Default\Site Characteristics Database; recovered 1 files; 191 bytes. Some data may have been lost. ****

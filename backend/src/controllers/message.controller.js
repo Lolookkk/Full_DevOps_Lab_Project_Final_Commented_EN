@@ -39,9 +39,9 @@ export const createMessage = async (req, res, next) => {
     res.status(201).json(newMessage)
   } catch (error) {
     if (error.name === 'ValidationError') {
-      return res.status(400).json({ error: error.message });
+      return res.status(400).json({ error: error.message })
     }
-    next(error);
+    next(error)
   }
 }
 

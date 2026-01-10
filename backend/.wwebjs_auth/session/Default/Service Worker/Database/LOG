@@ -1,3 +1,2 @@
-2026/01/10-18:02:44.495 789c Reusing MANIFEST F:\Travail\SoftWare\Full_DevOps_Lab_Project_Final_Commented_EN\backend\.wwebjs_auth\session\Default\Service Worker\Database/MANIFEST-000001
-2026/01/10-18:02:44.500 789c Recovering log #3
-2026/01/10-18:02:44.500 789c Reusing old log F:\Travail\SoftWare\Full_DevOps_Lab_Project_Final_Commented_EN\backend\.wwebjs_auth\session\Default\Service Worker\Database/000003.log 
+2026/01/10-19:26:18.082 8e58 Creating DB C:\Users\mathi\OneDrive\Bureau\annee 4 info\software truc\Full_DevOps_Lab_Project_Final_Commented_EN\backend\.wwebjs_auth\session\Default\Service Worker\Database since it was missing.
+2026/01/10-19:26:18.095 8e58 Reusing MANIFEST C:\Users\mathi\OneDrive\Bureau\annee 4 info\software truc\Full_DevOps_Lab_Project_Final_Commented_EN\backend\.wwebjs_auth\session\Default\Service Worker\Database/MANIFEST-000001
