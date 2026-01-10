@@ -87,15 +87,21 @@ async function seed () {
     ])
     console.log('✉️ Messages créés:', messages.length)
 
+    const token = jwt.sign(
+      { sub: user._id, email: user.email },
+      process.env.JWT_SECRET || 'test42',
+      { expiresIn: '1d' }
+    )
+    console.log('\n VOICI LE TOKEN VALIDE')
+    console.log(token)
+    console.log('\n')
+
     console.log('🎯 Seed terminé avec succès !')
     process.exit(0)
   } catch (error) {
-    console.error('❌ Erreur seed:', error)
+    console.log('❌ Erreur seed:', error)
     process.exit(1)
   }
 }
-
-const token = jwt.sign({ id: 'id_user_seeded' }, 'test42', { expiresIn: '1d' })
-console.log(token)
 
 seed()
