@@ -1,5 +1,4 @@
 import { Router } from 'express'
-import { auth } from '../middlewares/auth.js'
 import {
   listContacts, getContact, createContact, updateContact, deleteContact
 } from '../controllers/contacts.controller.js'

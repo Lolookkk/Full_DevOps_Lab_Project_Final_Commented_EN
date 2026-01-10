@@ -56,4 +56,52 @@ describe('Contacts API', () => {
 
     expect(dup.body.error).toBe('Duplicate key')
   })
+
+  it('gets, updates, and deletes a contact', async () => {
+    const created = await request(app)
+      .post('/api/contacts')
+      .set('Authorization', `Bearer ${token}`)
+      .send({ name: 'ToUpdate', phoneE164: '+33600000010' })
+      .expect(201)
+
+    const fetched = await request(app)
+      .get(`/api/contacts/${created.body._id}`)
+      .set('Authorization', `Bearer ${token}`)
+      .expect(200)
+
+    expect(fetched.body._id).toBe(created.body._id)
+
+    const updated = await request(app)
+      .put(`/api/contacts/${created.body._id}`)
+      .set('Authorization', `Bearer ${token}`)
+      .send({ name: 'Updated' })
+      .expect(200)
+
+    expect(updated.body.name).toBe('Updated')
+
+    await request(app)
+      .delete(`/api/contacts/${created.body._id}`)
+      .set('Authorization', `Bearer ${token}`)
+      .expect(204)
+  })
+
+  it('returns 404 when contact not found', async () => {
+    const missingId = '64b7f3c2f1b2a3c4d5e6f123'
+
+    await request(app)
+      .get(`/api/contacts/${missingId}`)
+      .set('Authorization', `Bearer ${token}`)
+      .expect(404)
+
+    await request(app)
+      .put(`/api/contacts/${missingId}`)
+      .set('Authorization', `Bearer ${token}`)
+      .send({ name: 'Nope' })
+      .expect(404)
+
+    await request(app)
+      .delete(`/api/contacts/${missingId}`)
+      .set('Authorization', `Bearer ${token}`)
+      .expect(404)
+  })
 })
