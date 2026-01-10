@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route, Link, useLocation } from 'react-router-do
 import Login from './pages/Login';
 import Contacts from './pages/Contacts';
 import Events from './pages/Events';
+import ConnectWhatsapp from './pages/ConnectWhatsapp';
 
 // Improved Navbar Component
 function Navbar() {
@@ -45,6 +46,7 @@ function App() {
       <div className="min-h-screen bg-gray-50 text-gray-800 font-sans">
         <Routes>
           <Route path="/" element={<Login />} />
+          <Route path="/connect" element={<><Navbar /><ConnectWhatsapp /></>} />
           <Route path="/contacts" element={<><Navbar /><Contacts /></>} />
           <Route path="/events" element={<><Navbar /><Events /></>} />
         </Routes>

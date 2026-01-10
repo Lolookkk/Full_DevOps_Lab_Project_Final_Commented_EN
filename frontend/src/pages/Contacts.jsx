@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import api from '../api/axios';
+import { Link } from 'react-router-dom';
 
 export default function Contacts() {
   const [contacts, setContacts] = useState([]);
@@ -32,25 +33,34 @@ export default function Contacts() {
   };
 
   return (
-    <div className="p-6">
-      <h1 className="text-2xl font-bold mb-4">My Contacts</h1>
-      
-      {/* Add Contact Form */}
-      <form onSubmit={addContact} className="mb-8 flex gap-2">
-        <input className="border p-2 rounded" placeholder="Name" value={newName} onChange={e => setNewName(e.target.value)} />
-        <input className="border p-2 rounded" placeholder="+336..." value={newPhone} onChange={e => setNewPhone(e.target.value)} />
-        <button className="bg-green-600 text-white px-4 py-2 rounded">Add</button>
-      </form>
-
-      {/* Contacts List */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        {contacts.map(contact => (
-          <div key={contact._id} className="p-4 border rounded shadow bg-white">
-            <h3 className="font-bold">{contact.name}</h3>
-            <p className="text-gray-600">{contact.phoneE164}</p>
-          </div>
-        ))}
+    // Inside Contacts.jsx return statement, above the main div:
+    <>{/* Warning Banner */}
+      <div className="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 mb-4" role="alert">
+        <p className="font-bold">⚠️ WhatsApp Not Connected</p>
+        <p>
+          Messages cannot be sent. <Link to="/connect" className="underline">Click here to connect now.</Link>
+        </p>
       </div>
-    </div>
+      <div className="p-6">
+        <h1 className="text-2xl font-bold mb-4">My Contacts</h1>
+
+        {/* Add Contact Form */}
+        <form onSubmit={addContact} className="mb-8 flex gap-2">
+          <input className="border p-2 rounded" placeholder="Name" value={newName} onChange={e => setNewName(e.target.value)} />
+          <input className="border p-2 rounded" placeholder="+336..." value={newPhone} onChange={e => setNewPhone(e.target.value)} />
+          <button className="bg-green-600 text-white px-4 py-2 rounded">Add</button>
+        </form>
+
+        {/* Contacts List */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {contacts.map(contact => (
+            <div key={contact._id} className="p-4 border rounded shadow bg-white">
+              <h3 className="font-bold">{contact.name}</h3>
+              <p className="text-gray-600">{contact.phoneE164}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </>
   );
 }
