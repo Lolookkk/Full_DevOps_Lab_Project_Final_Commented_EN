@@ -14,7 +14,7 @@ export default function DefineMessage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  localStorage.setItem("token", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2OTYyOTU1NTQ0YWE4N2VhYzBmMmUzMmIiLCJpZCI6IjY5NjI5NTU1NDRhYTg3ZWFjMGYyZTMyYiIsImVtYWlsIjoidGVzdEB0ZXN0LmNvbSIsImlhdCI6MTc2ODA2ODQzNywiZXhwIjoxNzY4MTU0ODM3fQ.83cgq_TPyXjRmq-4cDLewc4D11fFnxEUs-UbB8zK6gI");
+  localStorage.setItem("token", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2OTYyYmFiNWM0OTJlNWMwNDEzNDBkOGIiLCJpZCI6IjY5NjJiYWI1YzQ5MmU1YzA0MTM0MGQ4YiIsImVtYWlsIjoidGVzdEB0ZXN0LmNvbSIsImlhdCI6MTc2ODA3ODAwNSwiZXhwIjoxNzY4MTY0NDA1fQ.TY9vjuRmlWSkDb9OL48jperK1NSqSKdmIzlBXa-zD2o");
   const token = localStorage.getItem("token");
 
   const templates = [

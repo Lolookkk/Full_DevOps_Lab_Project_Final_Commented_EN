@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 import Messages from "./pages/Messages";
 import DefineMessages from './pages/DefineMessages';
 import Campaigns from './pages/Campaigns';
+import ConnectWhatsapp from './pages/ConnectWhatsapp';
 import './app.css'
 export default function App () {
   return (
@@ -15,6 +16,7 @@ export default function App () {
         {/* <Link to="/messages">Messages</Link> */}
         <Link to="/messages">Messages</Link> 
         <Link to="/campaigns">Campaigns</Link> 
+        <Link to="/connect">WhatsApp</Link>
       </nav>
 
       <main>
@@ -23,6 +25,7 @@ export default function App () {
           {/* <Route path="/messages" element={<Messages />} /> */}
           <Route path="/messages" element={<DefineMessages />} />
           <Route path="/campaigns" element={<Campaigns />} />
+          <Route path="/connect" element={<ConnectWhatsapp />} />
         </Routes>
       </main>
     </div>
