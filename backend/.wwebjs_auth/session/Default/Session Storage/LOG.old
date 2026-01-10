@@ -1,0 +1,4 @@
+2026/01/10-20:20:24.071 a25c Reusing MANIFEST C:\Users\mathi\OneDrive\Bureau\annee 4 info\software truc\Full_DevOps_Lab_Project_Final_Commented_EN\backend\.wwebjs_auth\session\Default\Session Storage/MANIFEST-000001
+2026/01/10-20:20:24.077 a25c Recovering log #3
+2026/01/10-20:20:24.150 a25c Level-0 table #3: started
+2026/01/10-20:20:24.153 a25c Level-0 table #3: 0 bytes IO error: C:\Users\mathi\OneDrive\Bureau\annee 4 info\software truc\Full_DevOps_Lab_Project_Final_Commented_EN\backend\.wwebjs_auth\session\Default\Session Storage/000003.ldb: Unable to create writable file (ChromeMethodBFE: 9::NewWritableFile::16)

@@ -50,4 +50,68 @@ describe('Events API', () => {
 
     expect(listed.body.length).toBe(1)
   })
+
+  it('returns 400 when contactId is invalid', async () => {
+    await request(app)
+      .post('/api/events')
+      .set('Authorization', `Bearer ${token}`)
+      .send({
+        contactId: '64b7f3c2f1b2a3c4d5e6f999',
+        type: 'birthday',
+        date: '2000-01-01T00:00:00.000Z'
+      })
+      .expect(400)
+  })
+
+  it('updates and deletes an event', async () => {
+    const contact = await request(app)
+      .post('/api/contacts')
+      .set('Authorization', `Bearer ${token}`)
+      .send({ name: 'Eva', phoneE164: '+33611111112' })
+      .expect(201)
+
+    const created = await request(app)
+      .post('/api/events')
+      .set('Authorization', `Bearer ${token}`)
+      .send({
+        contactId: contact.body._id,
+        type: 'custom',
+        label: 'Test',
+        date: '2001-01-01T00:00:00.000Z'
+      })
+      .expect(201)
+
+    const updated = await request(app)
+      .put(`/api/events/${created.body._id}`)
+      .set('Authorization', `Bearer ${token}`)
+      .send({ label: 'Updated' })
+      .expect(200)
+
+    expect(updated.body.label).toBe('Updated')
+
+    await request(app)
+      .delete(`/api/events/${created.body._id}`)
+      .set('Authorization', `Bearer ${token}`)
+      .expect(204)
+  })
+
+  it('returns 404 when event not found', async () => {
+    const missingId = '64b7f3c2f1b2a3c4d5e6f124'
+
+    await request(app)
+      .get(`/api/events/${missingId}`)
+      .set('Authorization', `Bearer ${token}`)
+      .expect(404)
+
+    await request(app)
+      .put(`/api/events/${missingId}`)
+      .set('Authorization', `Bearer ${token}`)
+      .send({ label: 'Nope' })
+      .expect(404)
+
+    await request(app)
+      .delete(`/api/events/${missingId}`)
+      .set('Authorization', `Bearer ${token}`)
+      .expect(404)
+  })
 })
