@@ -1,132 +1,131 @@
 import { useState, useEffect } from "react";
 
-function Campaigns() {
+export default function Campaigns() {
   const [contacts, setContacts] = useState([]);
-  const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
-  const [selectedContacts, setSelectedContacts] = useState([]);
-  const [template, setTemplate] = useState("");
-  const [scheduledDate, setScheduledDate] = useState("");
-  const [loading, setLoading] = useState(false);
   const [campaigns, setCampaigns] = useState([]);
 
-  // Templates mock
-  const templates = [
-    { id: "birthday", name: "Anniversaire", content: "Joyeux anniversaire {nom} !" },
-    { id: "holiday", name: "Fêtes", content: "Joyeuses fêtes {nom} !" },
-    { id: "custom", name: "Personnalisé", content: "" },
-  ];
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
+  const [messageTemplate, setMessageTemplate] = useState("");
+  const [selectedContacts, setSelectedContacts] = useState([]);
+  const [scheduledDate, setScheduledDate] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
-  // -------- MOCK DATA --------
+  const token = localStorage.getItem("token");
+
+  // -------- FETCH CONTACTS --------
   useEffect(() => {
-    const mockContacts = [
-      { _id: "1", name: "Jean Dupont", phoneE164: "+33612345678" },
-      { _id: "2", name: "Marie Martin", phoneE164: "+33687654321" },
-      { _id: "3", name: "Paul Durand", phoneE164: "+33611112222" },
-    ];
-    setContacts(mockContacts);
+    if (!token) return;
+    const fetchContacts = async () => {
+      try {
+        const res = await fetch("/api/contacts", { headers: { Authorization: `Bearer ${token}` } });
+        if (!res.ok) throw new Error("Impossible de charger les contacts");
+        setContacts(await res.json());
+      } catch (err) {
+        setError(err.message);
+      }
+    };
+    fetchContacts();
+  }, [token]);
 
-    // 5 campagnes mock
-    setCampaigns([
-      {
-        _id: "c1",
-        name: "Campagne Anniversaire Jean",
-        description: "Souhaiter bon anniversaire à Jean",
-        contacts: [mockContacts[0]],
-        messageTemplate: templates[0].content,
-        status: "completed",
-        scheduledDate: new Date(Date.now() - 3600 * 1000),
-        stats: { sentCount: 1, failedCount: 0 },
-      },
-      {
-        _id: "c2",
-        name: "Campagne Fêtes Marie",
-        description: "Joyeuses fêtes",
-        contacts: [mockContacts[1]],
-        messageTemplate: templates[1].content,
-        status: "scheduled",
-        scheduledDate: new Date(Date.now() + 3600 * 1000),
-        stats: { sentCount: 0, failedCount: 0 },
-      },
-      {
-        _id: "c3",
-        name: "Campagne personnalisée Paul",
-        description: "Message custom",
-        contacts: [mockContacts[2]],
-        messageTemplate: "Hello {nom}, message personnalisé !",
-        status: "scheduled",
-        scheduledDate: new Date(Date.now() + 7200 * 1000),
-        stats: { sentCount: 0, failedCount: 0 },
-      },
-      {
-        _id: "c4",
-        name: "Campagne échouée",
-        description: "Test échec",
-        contacts: [mockContacts[0]],
-        messageTemplate: "Test message échoué",
-        status: "cancelled",
-        scheduledDate: new Date(Date.now() - 3600 * 1000),
-        stats: { sentCount: 0, failedCount: 1 },
-      },
-      {
-        _id: "c5",
-        name: "Campagne envoyée",
-        description: "Message déjà envoyé",
-        contacts: [mockContacts[1]],
-        messageTemplate: "Message déjà envoyé",
-        status: "completed",
-        scheduledDate: new Date(Date.now() - 2 * 3600 * 1000),
-        stats: { sentCount: 1, failedCount: 0 },
-      },
-    ]);
-  }, []);
+  // -------- FETCH CAMPAIGNS --------
+  useEffect(() => {
+    if (!token) return;
+    const fetchCampaigns = async () => {
+      try {
+        const res = await fetch("/api/campaigns", { headers: { Authorization: `Bearer ${token}` } });
+        if (!res.ok) throw new Error("Impossible de charger les campagnes");
+        setCampaigns(await res.json());
+      } catch (err) {
+        setError(err.message);
+      }
+    };
+    fetchCampaigns();
+  }, [token]);
 
   // -------- CREATE CAMPAIGN --------
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!name || selectedContacts.length === 0 || !scheduledDate) return;
     setLoading(true);
 
-    const selected = contacts.filter((c) => selectedContacts.includes(c._id));
-    const newCampaign = {
-      _id: Date.now().toString(),
-      name,
-      description,
-      contacts: selected,
-      messageTemplate: template,
-      status: "scheduled",
-      scheduledDate: new Date(scheduledDate),
-      stats: { sentCount: 0, failedCount: 0 },
-    };
+    try {
+      const res = await fetch("/api/campaigns", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          name,
+          description,
+          contacts: selectedContacts,
+          messageTemplate,
+          scheduledDate,
+        }),
+      });
 
-    setCampaigns((prev) => [...prev, newCampaign]);
+      if (!res.ok) throw new Error("Impossible de créer la campagne");
 
-    setName("");
-    setDescription("");
-    setSelectedContacts([]);
-    setTemplate("");
-    setScheduledDate("");
-    setLoading(false);
+      const newCampaign = await res.json();
+      setCampaigns((prev) => [...prev, newCampaign]);
+
+      // reset form
+      setName("");
+      setDescription("");
+      setMessageTemplate("");
+      setSelectedContacts([]);
+      setScheduledDate("");
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  // -------- SEND NOW --------
-  const sendNow = (id) => {
-    setCampaigns((prev) =>
-      prev.map((c) =>
-        c._id === id
-          ? { ...c, status: "completed", stats: { ...c.stats, sentCount: c.contacts.length } }
-          : c
-      )
+  const toggleContact = (contactId) => {
+    setSelectedContacts((prev) =>
+      prev.includes(contactId)
+        ? prev.filter((id) => id !== contactId)
+        : [...prev, contactId]
     );
   };
 
-  // -------- FILTERS --------
+  const handleSelectAll = () => {
+    if (selectedContacts.length === contacts.length) {
+      setSelectedContacts([]);
+    } else {
+      setSelectedContacts(contacts.map((c) => c._id));
+    }
+  };
+
+  // -------- FILTER CAMPAIGNS --------
   const scheduled = campaigns.filter((c) => c.status === "scheduled");
   const completed = campaigns.filter((c) => c.status === "completed");
   const cancelled = campaigns.filter((c) => c.status === "cancelled");
 
+  // -------- UTIL TO DISPLAY CONTACT NAMES --------
+  const renderContactNames = (campaignContacts) => {
+    if (!campaignContacts || campaignContacts.length === 0) return "Aucun contact";
+
+    const names = campaignContacts.map((c) => {
+      // 1. Si le backend a bien 'populate' le contact
+      if (c && c.name) return c.name;
+
+      // 2. Sinon, on essaie de retrouver le contact dans notre liste locale 'contacts'
+      const id = typeof c === "string" ? c : c._id;
+      const found = contacts.find((contact) => contact._id === id);
+      return found ? found.name : "Contact inconnu";
+    });
+
+    return names.join(", ");
+  };
+
   return (
     <div>
       <h1>Définir une campagne</h1>
+      {error && <p style={{ color: "red" }}>{error}</p>}
 
       <form onSubmit={handleSubmit}>
         <div>
@@ -140,33 +139,38 @@ function Campaigns() {
         </div>
 
         <div>
-          <label>Contacts</label>
-          <select
-            multiple
-            value={selectedContacts}
-            onChange={(e) =>
-              setSelectedContacts(Array.from(e.target.selectedOptions, (o) => o.value))
-            }
+          <label>Modèle de message</label>
+          <textarea
+            value={messageTemplate}
+            onChange={(e) => setMessageTemplate(e.target.value)}
+            rows="3"
             required
-          >
-            {contacts.map((c) => (
-              <option key={c._id} value={c._id}>
-                {c.name} ({c.phoneE164})
-              </option>
-            ))}
-          </select>
+          />
         </div>
 
         <div>
-          <label>Template</label>
-          <select value={template} onChange={(e) => setTemplate(e.target.value)} required>
-            <option value="">Choisir un template</option>
-            {templates.map((t) => (
-              <option key={t.id} value={t.content}>
-                {t.name}
-              </option>
+          <label>Contacts</label>
+          <div>
+            <div>
+              <input
+                type="checkbox"
+                checked={selectedContacts.length === contacts.length && contacts.length > 0}
+                onChange={handleSelectAll}
+              />{" "}
+              <strong>Tout sélectionner</strong>
+            </div>
+            {contacts.map((c) => (
+              <div key={c._id}>
+                <input
+                  type="checkbox"
+                  value={c._id}
+                  checked={selectedContacts.includes(c._id)}
+                  onChange={() => toggleContact(c._id)}
+                />{" "}
+                {c.name} ({c.phoneE164})
+              </div>
             ))}
-          </select>
+          </div>
         </div>
 
         <div>
@@ -184,7 +188,6 @@ function Campaigns() {
         </button>
       </form>
 
-      {/* -------- FUTURE CAMPAIGNS -------- */}
       <h2>Campagnes programmées</h2>
       {scheduled.length === 0 && <p>Aucune campagne programmée</p>}
       <ul>
@@ -192,12 +195,13 @@ function Campaigns() {
           <li key={c._id}>
             <strong>{c.name}</strong> — {c.description} — <em>Status: {c.status}</em>
             <br />
-            <button onClick={() => sendNow(c._id)}>Envoyer maintenant</button>
+            Date d'envoi : {new Date(c.scheduledDate).toLocaleString()}
+            <br />
+            Contacts : {renderContactNames(c.contacts)}
           </li>
         ))}
       </ul>
 
-      {/* -------- HISTORY -------- */}
       <h2>Campagnes terminées</h2>
       {completed.length === 0 && <p>Aucune campagne terminée</p>}
       <ul>
@@ -205,12 +209,15 @@ function Campaigns() {
           <li key={c._id}>
             <strong>{c.name}</strong> — {c.description} — <em>Status: {c.status}</em>
             <br />
-            Envoyé à {c.stats.sentCount} contacts
+            Date d'envoi : {new Date(c.scheduledDate).toLocaleString()}
+            <br />
+            Contacts : {renderContactNames(c.contacts)}
+            <br />
+            Envoyé à {c.stats?.sentCount || 0} contacts
           </li>
         ))}
       </ul>
 
-      {/* -------- CANCELLED -------- */}
       <h2>Campagnes annulées</h2>
       {cancelled.length === 0 && <p>Aucune campagne annulée</p>}
       <ul>
@@ -218,12 +225,14 @@ function Campaigns() {
           <li key={c._id}>
             <strong>{c.name}</strong> — {c.description} — <em>Status: {c.status}</em>
             <br />
-            Échec pour {c.stats.failedCount} contacts
+            Date d'envoi : {new Date(c.scheduledDate).toLocaleString()}
+            <br />
+            Contacts : {renderContactNames(c.contacts)}
+            <br />
+            Échec pour {c.stats?.failedCount || 0} contacts
           </li>
         ))}
       </ul>
     </div>
   );
 }
-
-export default Campaigns;

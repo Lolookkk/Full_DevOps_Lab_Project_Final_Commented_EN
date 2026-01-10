@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import './DefineMessages.css'
+
 export default function DefineMessage() {
   const [contacts, setContacts] = useState([]);
   const [events, setEvents] = useState([]);
@@ -9,12 +9,11 @@ export default function DefineMessage() {
   const [selectedEvent, setSelectedEvent] = useState("");
   const [selectedTemplate, setSelectedTemplate] = useState("");
   const [messageContent, setMessageContent] = useState("");
-  const [scheduledAt, setScheduledAt] = useState("");
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  localStorage.setItem("token", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2OTYyOTU1NTQ0YWE4N2VhYzBmMmUzMmIiLCJpZCI6IjY5NjI5NTU1NDRhYTg3ZWFjMGYyZTMyYiIsImVtYWlsIjoidGVzdEB0ZXN0LmNvbSIsImlhdCI6MTc2ODA2ODQzNywiZXhwIjoxNzY4MTU0ODM3fQ.83cgq_TPyXjRmq-4cDLewc4D11fFnxEUs-UbB8zK6gI");
+  // Token JWT dans localStorage
   const token = localStorage.getItem("token");
 
   const templates = [
@@ -23,41 +22,74 @@ export default function DefineMessage() {
     { id: "custom", name: "Personnalisé", content: "" },
   ];
 
-  // ---------- UTIL ---------- //
+  // -------- UTILS --------
   const applyContactName = (text, contactId) => {
     if (!text || !contactId) return text;
     const contact = contacts.find((c) => c._id === contactId);
-    return contact ? text.replace(/{nom}/g, contact.name) : text;
+    if (!contact) return text;
+    return text.replace(/{nom}/g, contact.name);
   };
 
-  // ---------- FETCH CONTACTS, EVENTS, MESSAGES ---------- //
+  // -------- FETCH CONTACTS & EVENTS --------
   useEffect(() => {
-    if (!token) return;
+    async function fetchContacts() {
+      if (!token) return;
 
-    const fetchData = async () => {
       try {
-        const [contactsRes, eventsRes, messagesRes] = await Promise.all([
-          fetch("/api/contacts", { headers: { Authorization: `Bearer ${token}` } }),
-          fetch("/api/events", { headers: { Authorization: `Bearer ${token}` } }),
-          fetch("/api/messages", { headers: { Authorization: `Bearer ${token}` } }),
-        ]);
-
-        if (!contactsRes.ok) throw new Error("Impossible de charger les contacts");
-        if (!eventsRes.ok) throw new Error("Impossible de charger les événements");
-        if (!messagesRes.ok) throw new Error("Impossible de charger les messages");
-
-        setContacts(await contactsRes.json());
-        setEvents(await eventsRes.json());
-        setMessages(await messagesRes.json());
+        const res = await fetch("/api/contacts", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        if (!res.ok) throw new Error("Impossible de charger les contacts");
+        const data = await res.json();
+        setContacts(data);
       } catch (err) {
+        console.error(err);
         setError(err.message);
       }
-    };
+    }
 
-    fetchData();
+    async function fetchEvents() {
+      if (!token) return;
+
+      try {
+        const res = await fetch("/api/events", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        if (!res.ok) throw new Error("Impossible de charger les événements");
+        const data = await res.json();
+        setEvents(data);
+      } catch (err) {
+        console.error(err);
+        setError(err.message);
+      }
+    }
+
+    fetchContacts();
+    fetchEvents();
   }, [token]);
 
-  // ---------- TEMPLATE CHANGE ---------- //
+  // -------- FETCH MESSAGES --------
+  useEffect(() => {
+    async function fetchMessages() {
+      if (!token) return;
+
+      try {
+        const res = await fetch("/api/messages", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        if (!res.ok) throw new Error("Impossible de charger les messages");
+        const data = await res.json();
+        setMessages(data);
+      } catch (err) {
+        console.error(err);
+        setError(err.message);
+      }
+    }
+
+    fetchMessages();
+  }, [token]);
+
+  // -------- TEMPLATE CHANGE --------
   useEffect(() => {
     if (selectedTemplate && selectedTemplate !== "custom") {
       const template = templates.find((t) => t.id === selectedTemplate);
@@ -67,14 +99,13 @@ export default function DefineMessage() {
     }
   }, [selectedTemplate, selectedContact]);
 
-  // ---------- CREATE MESSAGE ---------- //
+  // -------- CREATE MESSAGE --------
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!selectedContact || !messageContent) return;
 
     setLoading(true);
     try {
-      // CREATE NEW MESSAGE
       const res = await fetch("/api/messages", {
         method: "POST",
         headers: {
@@ -82,35 +113,26 @@ export default function DefineMessage() {
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
-          recipientId: selectedContact,
+          recipient: selectedContact,
           event: selectedEvent || null,
           content: messageContent,
-          scheduledAt,
         }),
       });
-
       if (!res.ok) throw new Error("Erreur création message");
 
-      const updatedMessage = await res.json();
-      setMessages((prev) => [...prev, updatedMessage]);
-
-      // Reset form
+      const newMessage = await res.json();
+      setMessages((prev) => [...prev, newMessage]);
       setSelectedContact("");
       setSelectedEvent("");
       setSelectedTemplate("");
       setMessageContent("");
-      setScheduledAt("");
     } catch (err) {
+      console.error(err);
       setError(err.message);
     } finally {
       setLoading(false);
     }
   };
-
-  // ---------- FILTER MESSAGES ---------- //
-  const scheduledMessages = messages.filter((m) => m.status === "scheduled");
-  const sentMessages = messages.filter((m) => m.status === "sent");
-  const failedMessages = messages.filter((m) => m.status === "failed");
 
   return (
     <div>
@@ -176,75 +198,22 @@ export default function DefineMessage() {
           />
         </div>
 
-        <div>
-          <label>Date d'envoi</label>
-          <input
-            type="datetime-local"
-            value={scheduledAt}
-            onChange={(e) => setScheduledAt(e.target.value)}
-          />
-        </div>
-
         <button type="submit" disabled={loading}>
           {loading ? "Envoi..." : "Programmer le message"}
         </button>
       </form>
 
-      {/* ---------- MESSAGES ---------- */}
-      <h2>Messages programmés</h2>
-      {scheduledMessages.length === 0 && <p>Aucun message programmé</p>}
+      <h2>Messages</h2>
+      {messages.length === 0 && <p>Aucun message</p>}
       <ul>
-        {scheduledMessages.map((m) => {
-          const contact =
-            typeof m.recipient === "string"
-              ? contacts.find((c) => c._id === m.recipient)
-              : m.recipient;
-          const event = events.find((e) => e._id === m.event);
-
-          return (
-            <li key={m._id}>
-              <strong>{contact?.name || "Inconnu"}</strong> — {m.content}{" "}
-              {event && <>({event.type} - {new Date(event.date).toLocaleDateString()})</>} —{" "}
-              <em>{m.status}</em>
-            </li>
-          );
-        })}
-      </ul>
-
-      <h2>Historique des messages envoyés</h2>
-      <ul>
-        {sentMessages.map((m) => {
-          const contact =
-            typeof m.recipient === "string"
-              ? contacts.find((c) => c._id === m.recipient)
-              : m.recipient;
-          return (
-            <li key={m._id}>
-              <strong>{contact?.name || "Inconnu"}</strong> — {m.content} —{" "}
-              <em>{m.status}</em>
-              <br />
-              Envoyé le {new Date(m.sentAt).toLocaleString()}
-            </li>
-          );
-        })}
-      </ul>
-
-      <h2>Messages échoués</h2>
-      <ul>
-        {failedMessages.map((m) => {
-          const contact =
-            typeof m.recipient === "string"
-              ? contacts.find((c) => c._id === m.recipient)
-              : m.recipient;
-          return (
-            <li key={m._id}>
-              <strong>{contact?.name || "Inconnu"}</strong> — {m.content} —{" "}
-              <em>{m.status}</em>
-              <br />
-              Erreur: {m.errorLog}
-            </li>
-          );
-        })}
+        {messages.map((m) => (
+          <li key={m._id}>
+            <strong>
+              {contacts.find((c) => c._id === m.recipient)?.name || "Inconnu"}
+            </strong>{" "}
+            — {m.content} — <em>{m.status}</em>
+          </li>
+        ))}
       </ul>
     </div>
   );

@@ -95,7 +95,7 @@ async function seed () {
       creator: user._id,
       contacts: [contact1._id, contact2._id],
       messageTemplate: 'Bonjour {name}, meilleurs vœux 🎉',
-      status: 'draft',
+      status: 'scheduled',
       scheduledDate: new Date()
     })
 
@@ -113,15 +113,15 @@ async function seed () {
         scheduledAt: new Date(),
         sentAt: new Date()
       },
-      {
-        sender: user._id,
-        recipient: contact1._id,
-        event: event2._id,
-        campaign: campaign._id,
-        content: 'Félicitations pour ton mariage 💍',
-        status: 'scheduled',
-        scheduledAt: new Date(Date.now() + 60 * 60 * 1000)
-      },
+      // {
+      //   sender: user._id,
+      //   recipient: contact1._id,
+      //   event: event2._id,
+      //   campaign: campaign._id,
+      //   content: 'Félicitations pour ton mariage 💍',
+      //   status: 'scheduled',
+      //   scheduledAt: new Date(Date.now() + 60 * 60 * 1000)
+      // },
       {
         sender: user._id,
         recipient: contact2._id,
