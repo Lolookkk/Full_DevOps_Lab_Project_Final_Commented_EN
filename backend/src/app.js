@@ -17,6 +17,7 @@ import contactsRoutes from './routes/contacts.routes.js'
 import eventsRoutes from './routes/events.routes.js'
 import messageRoutes from './routes/message.routes.js'
 import campaignRoutes from './routes/campaign.routes.js'
+import cors from 'cors'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
@@ -63,5 +64,11 @@ await mountAutoRoutes()
 
 // Global error middleware last
 app.use(errorHandler)
+
+app.use(cors({
+  origin: 'http://localhost:5173', // ton frontend
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'] // important pour JWT
+}))
 
 export default app

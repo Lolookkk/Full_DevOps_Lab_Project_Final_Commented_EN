@@ -1,6 +1,8 @@
 import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 import Messages from "./pages/Messages";
-import SendMessage from './pages/SendMessage';
+import DefineMessages from './pages/DefineMessages';
+import Campaigns from './pages/Campaigns';
+import './app.css'
 export default function App () {
   return (
     <div className="page">
@@ -10,15 +12,17 @@ export default function App () {
 
       <nav>
         <Link to="/">Accueil</Link>
-        <Link to="/messages">Messages</Link>
-        <Link to="/send">Envoyer message</Link> | 
+        {/* <Link to="/messages">Messages</Link> */}
+        <Link to="/messages">Messages</Link> 
+        <Link to="/campaigns">Campaigns</Link> 
       </nav>
 
       <main>
         <Routes>
           <Route path="/" element={<h1>AutoMessage</h1>} />
-          <Route path="/messages" element={<Messages />} />
-          <Route path="/send" element={<SendMessage />} />
+          {/* <Route path="/messages" element={<Messages />} /> */}
+          <Route path="/messages" element={<DefineMessages />} />
+          <Route path="/campaigns" element={<Campaigns />} />
         </Routes>
       </main>
     </div>
