@@ -34,15 +34,15 @@ const generateMessagesFromEvents = async () => {
           sender: event.userId,
           recipient: event.contactId._id,
           event: event._id,
-          content: event.label || 'Joyeux anniversaire !',
+          content: event.label || 'Happy birthday !',
           status: 'scheduled',
           scheduledAt: new Date()
         })
-        console.log(`[scheduler] Message d'anniversaire généré pour ${event.contactId.name}`)
+        console.log(`[scheduler] birthday message generated for ${event.contactId.name}`)
       }
     }
   } catch (err) {
-    console.error('[scheduler] Erreur génération events:', err)
+    console.error('[scheduler] error generating events:', err)
   }
 }
 
@@ -64,7 +64,7 @@ const processPendingMessages = async () => {
         msg.sentAt = new Date()
         await msg.save()
 
-        console.log(`[scheduler] Message envoyé avec succès à ${msg.recipient.phoneE164} (${msg.recipient.name || 'Sans nom'})`)
+        console.log(`[scheduler] message successfully sent to ${msg.recipient.phoneE164} (${msg.recipient.name || 'No name'})`)
       } catch (err) {
         msg.status = 'failed'
         msg.errorLog = err.message
@@ -103,21 +103,21 @@ const processPendingMessages = async () => {
 
       campaign.status = 'completed'
       await campaign.save()
-      console.log('[scheduler] Campaign envoyé avec succès')
+      console.log('[scheduler] campaign sent successfully')
     }
   } catch (error) {
-    console.error('[scheduler Error]:', error)
+    console.error('[scheduler error]: ', error)
   }
 }
 
 export const startScheduler = () => {
   cron.schedule('0 * * * *', () => {
-    console.log('[scheduler] Scan event...')
+    console.log('[scheduler] scan event...')
     generateMessagesFromEvents()
   })
 
   cron.schedule('* * * * *', () => {
-    console.log('[scheduler] Scan messages...')
+    console.log('[scheduler] scan messages...')
     processPendingMessages()
   })
 }

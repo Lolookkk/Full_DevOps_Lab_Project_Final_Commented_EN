@@ -16,6 +16,12 @@ export const createCampaign = async (req, res, next) => {
 
     res.status(201).json(newCampaign)
   } catch (error) {
+    if (error.name === 'ValidationError') {
+      return res.status(400).json({ 
+        error: 'Validation Failed', 
+        details: error.message 
+      })
+    }
     next(error)
   }
 }

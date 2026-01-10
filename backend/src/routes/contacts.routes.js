@@ -8,7 +8,7 @@ const router = Router()
 
 router.get('/api/contacts', listContacts)
 router.get('/api/contacts/:id', getContact)
-router.post('/api/contacts', auth, createContact)
+router.post('/api/contacts', createContact)
 router.put('/api/contacts/:id', updateContact)
 router.delete('/api/contacts/:id', deleteContact)
 

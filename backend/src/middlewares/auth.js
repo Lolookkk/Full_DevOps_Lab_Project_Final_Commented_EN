@@ -9,7 +9,7 @@ export function auth (req, res, next) {
     const secret = process.env.JWT_SECRET
     if (!secret) return res.status(500).json({ error: 'JWT_SECRET is missing' })
     const payload = jwt.verify(token, secret)
-    req.userId = payload.sub
+    req.userId = payload.sub || payload.id
     return next()
   } catch (err) {
     return res.status(401).json({ error: 'Invalid token' })

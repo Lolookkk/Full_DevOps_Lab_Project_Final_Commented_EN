@@ -12,7 +12,7 @@ const client = new Client({
 
 client.on('qr', (qr) => {
   qrcode.generate(qr, { small: true })
-  console.log('Scannez ce QR code pour connecter votre numéro WhatsApp !')
+  console.log('Scan this QR code to connect to your WhatsApp')
 })
 
 client.on('ready', () => {
@@ -20,11 +20,11 @@ client.on('ready', () => {
 })
 
 client.on('auth_failure', msg => {
-  console.error('Échec d’authentification :', msg)
+  console.error('Authentication failure: ', msg)
 })
 
-client.initialize().catch(err => console.error('Erreur init WhatsApp:', err))
+client.initialize().catch(err => console.error('Erreur initialize WhatsApp: ', err))
 
-console.log('[whatsapp] initialise')
+console.log('[whatsapp] initialized')
 
 export default client

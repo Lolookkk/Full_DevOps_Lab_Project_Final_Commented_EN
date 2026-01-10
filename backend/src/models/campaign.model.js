@@ -15,10 +15,19 @@ const campaignSchema = new mongoose.Schema({
     ref: 'User',
     required: true
   },
-  contacts: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Contact'
-  }],
+  contacts: {
+    type: [{ 
+      type: mongoose.Schema.Types.ObjectId, 
+      ref: 'Contact' 
+    }],
+    validate: {
+      validator: function(v) {
+        return v && v.length > 0;
+      },
+      message: 'A campaign must contain at least one contact..'
+    },
+    required: [true, 'The contact list is mandatory.']
+  },
   messageTemplate: {
     type: String,
     required: true

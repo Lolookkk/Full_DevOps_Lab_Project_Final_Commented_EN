@@ -7,7 +7,7 @@ export const createMessage = async (req, res, next) => {
     const { content, scheduledAt, recipientId } = req.body
 
     const contact = await Contact.findOne({ _id: recipientId, userId: req.userId })
-    if (!contact) return res.status(404).json({ error: 'Contact introuvable' })
+    if (!contact) return res.status(404).json({ error: 'Contact not found' })
 
     const isFuture = scheduledAt && new Date(scheduledAt) > new Date()
 
@@ -33,12 +33,15 @@ export const createMessage = async (req, res, next) => {
         newMessage.status = 'failed'
         newMessage.errorLog = err.message
         await newMessage.save()
-        return res.status(500).json({ error: 'Échec WhatsApp', raison: err.message })
+        return res.status(500).json({ error: 'WhatsApp failure', raison: err.message })
       }
     }
     res.status(201).json(newMessage)
   } catch (error) {
-    next(error)
+    if (error.name === 'ValidationError') {
+      return res.status(400).json({ error: error.message });
+    }
+    next(error);
   }
 }
 
