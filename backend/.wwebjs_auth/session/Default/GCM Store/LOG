@@ -1,3 +1,2 @@
-2026/01/10-19:47:35.087 ade0 Reusing MANIFEST C:\Users\mathi\OneDrive\Bureau\annee 4 info\software truc\Full_DevOps_Lab_Project_Final_Commented_EN\backend\.wwebjs_auth\session\Default\GCM Store/MANIFEST-000001
-2026/01/10-19:47:35.142 ade0 Recovering log #3
-2026/01/10-19:47:35.145 ade0 Reusing old log C:\Users\mathi\OneDrive\Bureau\annee 4 info\software truc\Full_DevOps_Lab_Project_Final_Commented_EN\backend\.wwebjs_auth\session\Default\GCM Store/000003.log 
+2026/01/10-21:25:38.737 5600 Creating DB C:\Users\aurel\Full_DevOps_Lab_Project_Final_Commented_EN\backend\.wwebjs_auth\session\Default\GCM Store since it was missing.
+2026/01/10-21:25:38.752 5600 Reusing MANIFEST C:\Users\aurel\Full_DevOps_Lab_Project_Final_Commented_EN\backend\.wwebjs_auth\session\Default\GCM Store/MANIFEST-000001

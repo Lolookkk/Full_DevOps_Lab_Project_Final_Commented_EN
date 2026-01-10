@@ -1,6 +1,6 @@
-2026/01/10-18:02:44.573 f6c Reusing MANIFEST F:\Travail\SoftWare\Full_DevOps_Lab_Project_Final_Commented_EN\backend\.wwebjs_auth\session\Default\shared_proto_db/MANIFEST-000001
-2026/01/10-18:02:44.573 f6c Recovering log #3
-2026/01/10-18:02:44.573 f6c (ignoring error) F:\Travail\SoftWare\Full_DevOps_Lab_Project_Final_Commented_EN\backend\.wwebjs_auth\session\Default\shared_proto_db/000003.log: dropping 32768 bytes; Corruption: checksum mismatch
-2026/01/10-18:02:44.573 f6c (ignoring error) F:\Travail\SoftWare\Full_DevOps_Lab_Project_Final_Commented_EN\backend\.wwebjs_auth\session\Default\shared_proto_db/000003.log: dropping 101 bytes; Corruption: error in middle of record
-2026/01/10-18:02:44.573 f6c (ignoring error) F:\Travail\SoftWare\Full_DevOps_Lab_Project_Final_Commented_EN\backend\.wwebjs_auth\session\Default\shared_proto_db/000003.log: dropping 318 bytes; Corruption: missing start of fragmented record(2)
-2026/01/10-18:02:44.599 f6c Reusing old log F:\Travail\SoftWare\Full_DevOps_Lab_Project_Final_Commented_EN\backend\.wwebjs_auth\session\Default\shared_proto_db/000003.log 
+2026/01/10-21:25:32.154 838 Reusing MANIFEST C:\Users\aurel\Full_DevOps_Lab_Project_Final_Commented_EN\backend\.wwebjs_auth\session\Default\shared_proto_db/MANIFEST-000001
+2026/01/10-21:25:32.163 838 Recovering log #3
+2026/01/10-21:25:32.163 838 (ignoring error) C:\Users\aurel\Full_DevOps_Lab_Project_Final_Commented_EN\backend\.wwebjs_auth\session\Default\shared_proto_db/000003.log: dropping 32768 bytes; Corruption: checksum mismatch
+2026/01/10-21:25:32.164 838 (ignoring error) C:\Users\aurel\Full_DevOps_Lab_Project_Final_Commented_EN\backend\.wwebjs_auth\session\Default\shared_proto_db/000003.log: dropping 101 bytes; Corruption: error in middle of record
+2026/01/10-21:25:32.164 838 (ignoring error) C:\Users\aurel\Full_DevOps_Lab_Project_Final_Commented_EN\backend\.wwebjs_auth\session\Default\shared_proto_db/000003.log: dropping 318 bytes; Corruption: missing start of fragmented record(2)
+2026/01/10-21:25:32.165 838 Reusing old log C:\Users\aurel\Full_DevOps_Lab_Project_Final_Commented_EN\backend\.wwebjs_auth\session\Default\shared_proto_db/000003.log 
