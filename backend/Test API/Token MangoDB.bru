@@ -1,0 +1,40 @@
+meta {
+  name: Token MangoDB
+  type: http
+  seq: 1
+}
+
+post {
+  url: http://localhost:3000/api/auth/login
+  body: json
+  auth: inherit
+}
+
+headers {
+  token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2OTYwNjE0ZmRkYjJkNDFkYzAwMDFhMjAiLCJpYXQiOjE3Njc5MjQwNzIsImV4cCI6MTc2ODUyODg3Mn0.TRkr6Opqk_aVbvGFUWFubywCd8EKAZ4FHlimkoExNTU
+}
+
+body:json {
+  {
+    "email": "sniper28",
+    "password": "mdpTest"
+  }
+}
+
+body:text {
+  sniper28
+  $nKUq6imXE_aN5F
+}
+
+script:post-response {
+  // This takes the "token" from your login response and saves it as a variable
+  if (res.body.token) {
+      bru.setVar("token", res.body.token);
+      console.log("Token updated successfully!");
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

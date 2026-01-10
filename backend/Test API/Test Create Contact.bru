@@ -1,0 +1,45 @@
+meta {
+  name: Test Create Contact
+  type: http
+  seq: 2
+}
+
+post {
+  url: http://localhost:3000/api/contacts
+  body: json
+  auth: bearer
+}
+
+headers {
+  token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2OTYwNjE0ZmRkYjJkNDFkYzAwMDFhMjAiLCJpYXQiOjE3Njc5MjQwNzIsImV4cCI6MTc2ODUyODg3Mn0.TRkr6Opqk_aVbvGFUWFubywCd8EKAZ4FHlimkoExNTU
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2OTYwNjE0ZmRkYjJkNDFkYzAwMDFhMjAiLCJpYXQiOjE3Njc5MjQwNzIsImV4cCI6MTc2ODUyODg3Mn0.TRkr6Opqk_aVbvGFUWFubywCd8EKAZ4FHlimkoExNTU
+}
+
+body:json {
+  {
+    "name": "Aurel",
+    "phoneE164": "+33625671898",
+    "relationshipType": "friend",
+    "isFavorite": true,
+    "consentStatus": true
+  }
+}
+
+script:post-response {
+  // Check if the response has an ID (adjust '_id' if your API uses 'id')
+  if (res.body._id) {
+      // Save this ID into a variable named "newContactId"
+      bru.setVar("newContactId", res.body._id); 
+      console.log("Captured Contact ID:", res.body._id);
+  } 
+  // Sometimes APIs wrap data in a "data" object (e.g., res.body.data._id)
+  // Check your "Response" window to see the exact path!
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

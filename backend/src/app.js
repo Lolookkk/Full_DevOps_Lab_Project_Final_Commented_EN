@@ -6,6 +6,7 @@
  *  - Global error handler (consistent JSON for errors)
  */
 import express from 'express'
+import cors from 'cors'
 import fs from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath, pathToFileURL } from 'node:url'
@@ -21,8 +22,12 @@ import campaignRoutes from './routes/campaign.routes.js'
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
-const app = express()
-app.use(express.json())
+const app = express();
+app.use(cors({
+  origin: 'http://localhost:5173',
+  credentials: true
+})); // <--- 2. Enable it for everyone (easiest for dev)
+app.use(express.json());
 
 // Simple root + health endpoints
 app.get('/', (_req, res) => res.json({ ok: true, message: 'Hello from CI/CD demo 👋' }))

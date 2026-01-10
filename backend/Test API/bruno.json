@@ -1,0 +1,11 @@
+{
+  "version": "1",
+  "name": "Test API",
+  "type": "collection",
+  "ignore": [
+    "node_modules",
+    ".git"
+  ],
+  "size": 0.0011749267578125,
+  "filesCount": 2
+}

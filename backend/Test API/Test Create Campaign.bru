@@ -1,0 +1,35 @@
+meta {
+  name: Test Create Campaign
+  type: http
+  seq: 5
+}
+
+post {
+  url: http://localhost:3000/api/campaigns
+  body: json
+  auth: bearer
+}
+
+headers {
+  token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2OTYwNjE0ZmRkYjJkNDFkYzAwMDFhMjAiLCJpYXQiOjE3Njc5MjQwNzIsImV4cCI6MTc2ODUyODg3Mn0.TRkr6Opqk_aVbvGFUWFubywCd8EKAZ4FHlimkoExNTU
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2OTYwNjE0ZmRkYjJkNDFkYzAwMDFhMjAiLCJpYXQiOjE3Njc5MjQwNzIsImV4cCI6MTc2ODUyODg3Mn0.TRkr6Opqk_aVbvGFUWFubywCd8EKAZ4FHlimkoExNTU
+}
+
+body:json {
+  {
+    "name": "Campagne Vœux 2026",
+    "description": "Envoi automatique pour la nouvelle année",
+    "contacts": ["69611de48f64ee551beca7f7", "69611e368f64ee551beca7ff"],
+    "messageTemplate": "Bonne année {name} !",
+    "status": "draft",
+    "scheduledDate": "2026-01-09T16:08:00Z"
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

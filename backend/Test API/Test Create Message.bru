@@ -1,0 +1,26 @@
+meta {
+  name: Test Create Message
+  type: http
+  seq: 6
+}
+
+post {
+  url: http://localhost:3000/api/messages
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "recipientId": "{{newContactId}}",
+    "event": "{{newEventId}}",
+    "content": "Joyeux anniversaire Mathis MDR API !",
+    "status": "pending",
+    "scheduledAt": "2026-01-09T16:10:00Z"
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

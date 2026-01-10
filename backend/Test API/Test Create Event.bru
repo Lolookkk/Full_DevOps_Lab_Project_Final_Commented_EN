@@ -1,0 +1,35 @@
+meta {
+  name: Test Create Event
+  type: http
+  seq: 3
+}
+
+post {
+  url: http://localhost:3000/api/events
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "contactId": "{{newContactId}}",
+    "type": "birthday",
+    "label": "Anniversaire de Mathis",
+    "date": "1990-05-15T00:00:00Z",
+    "timezone": "Europe/Paris"
+  }
+}
+
+script:post-response {
+  if (res.body._id) {
+      bru.setVar("newEventId", res.body._id);
+      console.log("Captured Event ID:", res.body._id);
+  } else {
+      console.log("Error: No Event ID returned!");
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
