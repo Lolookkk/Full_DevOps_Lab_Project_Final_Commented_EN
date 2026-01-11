@@ -1,6 +1,6 @@
 # AutoMessage Monorepo
 
-This repo contains a minimal backend (Express + tests + lint) and a minimal frontend (Vite + React) to unblock parallel work.
+This repo contains a minimal backend (Express + tests + lint) and a minimal frontend (Vite + React + TailwindCSS) to unblock parallel work.
 
 ## Quickstart
 
