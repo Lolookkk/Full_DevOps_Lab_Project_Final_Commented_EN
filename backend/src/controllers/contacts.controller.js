@@ -1,5 +1,7 @@
 import { Contact } from '../models/contact.model.js'
 
+
+
 export async function listContacts (req, res, next) {
   try {
     const docs = await Contact.find({ userId: req.userId }).sort({ createdAt: -1 })
@@ -21,7 +23,16 @@ export async function getContact (req, res, next) {
 
 export async function createContact (req, res, next) {
   try {
-    const payload = { ...req.body, userId: req.userId }
+    // FIX: Map 'phone' from frontend to 'phoneE164' for database
+    const payload = {
+      ...req.body,
+      userId: req.userId,
+      phoneE164: req.body.phone || req.body.phoneE164 // <--- THIS LINE FIXES IT
+    }
+    
+    // (Optional) Remove the old 'phone' key if strict schema is on, though usually fine
+    delete payload.phone; 
+
     const doc = await Contact.create(payload)
     res.status(201).json(doc)
   } catch (err) {
@@ -31,9 +42,15 @@ export async function createContact (req, res, next) {
 
 export async function updateContact (req, res, next) {
   try {
+    // FIX: Handle mapping for updates too
+    const updateData = { ...req.body };
+    if (updateData.phone) {
+      updateData.phoneE164 = updateData.phone;
+    }
+
     const doc = await Contact.findOneAndUpdate(
       { _id: req.params.id, userId: req.userId },
-      req.body,
+      updateData,
       { new: true, runValidators: true }
     )
     if (!doc) return res.status(404).json({ error: 'Contact not found' })
