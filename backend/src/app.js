@@ -6,6 +6,7 @@
  *  - Global error handler (consistent JSON for errors)
  */
 import express from 'express'
+import cors from 'cors'
 import fs from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath, pathToFileURL } from 'node:url'
@@ -17,12 +18,19 @@ import contactsRoutes from './routes/contacts.routes.js'
 import eventsRoutes from './routes/events.routes.js'
 import messageRoutes from './routes/message.routes.js'
 import campaignRoutes from './routes/campaign.routes.js'
+import { getWhatsappStatus } from './config/whatsapp.js'
+import { requestPairing } from './config/whatsapp.js'
+import { startScheduler } from './utils/scheduler.js'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
-const app = express()
-app.use(express.json())
+const app = express();
+app.use(cors({
+  origin: 'http://localhost:5173', // Allow only your frontend to connect
+  credentials: true // Allow cookies/tokens if needed
+}));
+app.use(express.json());
 
 // Simple root + health endpoints
 app.get('/', (_req, res) => res.json({ ok: true, message: 'Hello from CI/CD demo' }))
@@ -36,10 +44,27 @@ app.get('/health/db', (_req, res) => {
 })
 app.use(authRoutes)
 app.use('/api', auth)
+// WhatsApp status endpoint
+app.get('/api/whatsapp/status', (req, res) => {
+  const status = getWhatsappStatus()
+  res.json(status)
+})
+app.post('/api/whatsapp/pair', async (req, res) => {
+  const { phoneNumber } = req.body;
+  if (!phoneNumber) return res.status(400).json({ error: 'Phone number required' });
+
+  try {
+    const code = await requestPairing(phoneNumber);
+    res.json({ code });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to generate code', details: err.message });
+  }
+});
 app.use(contactsRoutes)
 app.use(eventsRoutes)
 app.use(messageRoutes)
 app.use(campaignRoutes)
+
 
 // Auto-mount all routers placed under src/routes/auto
 const autoDir = path.join(__dirname, 'routes', 'auto')
@@ -59,6 +84,9 @@ const mountAutoRoutes = async () => {
 }
 
 await mountAutoRoutes()
+
+startScheduler();
+
 app.use(errorHandler)
 
 export default app
